@@ -6,7 +6,8 @@ var gulp = require('gulp'),
 //scripts
 var concat = require('gulp-concat'),
     minifyJS = require('gulp-uglify'),
-    jshint = require('gulp-jshint');
+    jshint = require('gulp-jshint'),
+    babel = require("gulp-babel");
 
 //css
 var sass = require('gulp-sass'),
@@ -140,6 +141,7 @@ gulp.task('templates', function() {
 // concatenates scripts, but not items in exclude folder. includes vendor folder
 gulp.task('concat', function() {
   gulp.src([paths.scripts.vendor, paths.scripts.input,'!' + paths.scripts.exclude, '!' + paths.scripts.bower])
+   .pipe(babel())
    .pipe(concat('main.js'))
    .pipe(gulp.dest(paths.scripts.testing))
    .pipe(minifyJS())
