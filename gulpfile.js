@@ -40,8 +40,12 @@ var stylish = require('jshint-stylish'),
 var svgstore = require('gulp-svgstore'),
     svgmin = require('gulp-svgmin');
 
+// posts css
+var postcss = require('gulp-postcss'),
+    gradient = require('postcss-easing-gradients');
+
 //bower
-var mainBowerFiles = require('main-bower-files');
+// var mainBowerFiles = require('main-bower-files');
 
 // markdown
 var markdown = require('gulp-markdown');
@@ -160,12 +164,17 @@ gulp.task('lint', function() {
 });
 // lints and minifies css, moves to testing and dist
 gulp.task('css', function() {
+  var plugins = [
+    // autoprefixer({browsers: ['last 1 version']}),
+    // cssnano()
+    gradient()
+  ];
   gulp.src([paths.styles.input, paths.styles.exclude])
-  .pipe(scsslint())
-   .pipe(sass())
+   .pipe(scsslint())
    .pipe(sass({
      includePaths: require('node-bourbon').includePaths
    }))
+   .pipe(postcss(plugins))
    .pipe(autoprefixer({
       browsers: ['last 2 versions'],
       cascade: false
