@@ -12,7 +12,7 @@ var concat = require('gulp-concat'),
 var sass = require('gulp-sass'),
     cleanCSS = require('gulp-clean-css'),
     scsslint = require('gulp-scss-lint'),
-    autoprefixer = require('gulp-autoprefixer'),
+    autoprefixer = require('autoprefixer'),
     cssbeautify = require('gulp-cssbeautify');
 
 //images
@@ -43,7 +43,6 @@ var svgstore = require('gulp-svgstore'),
 // posts css
 var postcss = require('gulp-postcss'),
     gradient = require('postcss-easing-gradients');
-
 //bower
 // var mainBowerFiles = require('main-bower-files');
 
@@ -165,7 +164,7 @@ gulp.task('lint', function() {
 // lints and minifies css, moves to testing and dist
 gulp.task('css', function() {
   var plugins = [
-    // autoprefixer({browsers: ['last 1 version']}),
+    autoprefixer({browsers: ['last 2 versions']}),
     // cssnano()
     gradient()
   ];
@@ -175,10 +174,6 @@ gulp.task('css', function() {
      includePaths: require('node-bourbon').includePaths
    }))
    .pipe(postcss(plugins))
-   .pipe(autoprefixer({
-      browsers: ['last 2 versions'],
-      cascade: false
-   }))
    .pipe(cssbeautify({
         indent: '  ',
         openbrace: 'end-of-line',
