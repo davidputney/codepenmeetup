@@ -33,3 +33,15 @@
   position: absolute;
   left:-1000000px;
 }
+
+h1 {
+    font-family: "Open Sans", fontstack("Arial");
+    font-size:em(32);
+    border:rem(1) solid red;
+}
+
+h2 {
+    font-family: "Droid Sans", fontstack("Extra Stack");
+    font-size:rem(32);
+    padding:rem(32), rem(20), rem(15), rem(0);
+}
