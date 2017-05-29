@@ -6,7 +6,8 @@ var gulp = require('gulp'),
 //scripts
 var concat = require('gulp-concat'),
     minifyJS = require('gulp-uglify'),
-    jshint = require('gulp-jshint');
+    // jshint = require('gulp-jshint'),
+    eslint = require('gulp-eslint');
 
 //css
 var sass = require('gulp-sass'),
@@ -157,9 +158,50 @@ gulp.task('exclude', function() {
 // lints main javascript file for site
 gulp.task('lint', function() {
   return gulp.src('source/scripts/functions.js')
-    .pipe(jshint())
-    .pipe(jshint.reporter(stylish))
-    .pipe(jshint.reporter('fail'));
+  .pipe(eslint(
+    {
+      "parser": "babel-eslint",
+      rules: {
+            'no-alert': 0,
+            'no-bitwise': 0,
+            'camelcase': 1,
+            'curly': 1,
+            'eqeqeq': 0,
+            'no-eq-null': 0,
+            'guard-for-in': 1,
+            'no-empty': 1,
+            'no-use-before-define': 1,
+            'no-obj-calls': 2,
+            'no-unused-vars': 1,
+            'new-cap': 1,
+            'no-shadow': 0,
+            'strict': 1,
+            'no-invalid-regexp': 2,
+            'comma-dangle': 2,
+            'no-undef': 1,
+            'no-new': 1,
+            'no-extra-semi': 1,
+            'no-debugger': 2,
+            'no-caller': 1,
+            'semi': 1,
+            'quotes': 1,
+            'no-unreachable': 2,
+            'jsx-quotes': 1
+          },
+      envs: [
+        'browser', 'es6', 'react'
+      ],
+      plugins: ["react"],
+      extends: {
+        eslint: "recommended"
+      }
+  }
+  ))
+  .pipe(eslint.format())
+  .pipe(eslint.failAfterError());
+    // .pipe(jshint())
+    // .pipe(jshint.reporter(stylish))
+    // .pipe(jshint.reporter('fail'));
 });
 // lints and minifies css, moves to testing and dist
 gulp.task('css', function() {
