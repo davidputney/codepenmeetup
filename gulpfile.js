@@ -7,7 +7,9 @@ var gulp = require('gulp'),
 var concat = require('gulp-concat'),
     minifyJS = require('gulp-uglify'),
     // jshint = require('gulp-jshint'),
-    eslint = require('gulp-eslint');
+    eslint = require('gulp-eslint'),
+    sourcemaps = require("gulp-sourcemaps");
+;
 
 //css
 var sass = require('gulp-sass'),
@@ -43,7 +45,8 @@ var svgstore = require('gulp-svgstore'),
 
 // posts css
 var postcss = require('gulp-postcss'),
-    gradient = require('postcss-easing-gradients');
+    gradient = require('postcss-easing-gradients'),
+    cssnano = require('cssnano');
 //bower
 // var mainBowerFiles = require('main-bower-files');
 
@@ -144,15 +147,19 @@ gulp.task('templates', function() {
 // concatenates scripts, but not items in exclude folder. includes vendor folder
 gulp.task('concat', function() {
   gulp.src([paths.scripts.vendor, paths.scripts.input,'!' + paths.scripts.exclude])
+   .pipe(sourcemaps.init())
    .pipe(concat('main.js'))
-   .pipe(gulp.dest(paths.scripts.testing))
    .pipe(minifyJS())
+   .pipe(sourcemaps.write("."))
+   .pipe(gulp.dest(paths.scripts.testing))
    .pipe(gulp.dest(paths.scripts.dist));
 });
 gulp.task('exclude', function() {
   gulp.src(paths.scripts.exclude)
-   .pipe(gulp.dest(paths.scripts.testing))
+   .pipe(sourcemaps.init())
    .pipe(minifyJS())
+   .pipe(sourcemaps.write("."))
+   .pipe(gulp.dest(paths.scripts.testing))
    .pipe(gulp.dest(paths.scripts.dist));
 });
 // lints main javascript file for site
@@ -207,11 +214,12 @@ gulp.task('lint', function() {
 gulp.task('css', function() {
   var plugins = [
     autoprefixer({browsers: ['last 2 versions']}),
-    // cssnano()
+    cssnano(),
     gradient()
   ];
   gulp.src([paths.styles.input, paths.styles.exclude])
    .pipe(scsslint())
+   .pipe(sourcemaps.init())
    .pipe(sass({
      includePaths: require('node-bourbon').includePaths
    }))
@@ -221,8 +229,9 @@ gulp.task('css', function() {
         openbrace: 'end-of-line',
         autosemicolon: true
     }))
-   .pipe(gulp.dest(paths.styles.testing))
     .pipe(cleanCSS())
+    .pipe(sourcemaps.write("."))
+    .pipe(gulp.dest(paths.styles.testing))
     .pipe(gulp.dest(paths.styles.dist));
 });
 // creates svg sprite from folder of SVGs and moves it to testing and dist
