@@ -7,7 +7,9 @@ var gulp = require('gulp'),
 var concat = require('gulp-concat'),
     minifyJS = require('gulp-uglify'),
     // jshint = require('gulp-jshint'),
-    eslint = require('gulp-eslint');
+    eslint = require('gulp-eslint'),
+    sourcemaps = require("gulp-sourcemaps");
+;
 
 //css
 var sass = require('gulp-sass'),
@@ -43,9 +45,8 @@ var svgstore = require('gulp-svgstore'),
 
 // posts css
 var postcss = require('gulp-postcss'),
-    gradient = require('postcss-easing-gradients');
-//bower
-// var mainBowerFiles = require('main-bower-files');
+    gradient = require('postcss-easing-gradients'),
+    cssnano = require('cssnano');
 
 // markdown
 var markdown = require('gulp-markdown');
@@ -71,16 +72,10 @@ var paths = {
   scripts : {
     input : 'source/scripts/*.js',
     exclude : 'source/scripts/exclude/*.js',
-    // bower : 'bower_components/**/*.js',
     vendor : 'source/scripts/vendor/*.js',
     testing : 'test/scripts/',
     dist : 'public/scripts/'
   },
-  // bower : {
-  //  components : 'bower_components',
-  //  json : 'bower.json',
-  //  vendor : 'source/scripts/vendor/'
-  // },
   styles : {
     input : 'source/sass/*.scss',
     exclude : '!source/sass/partials/*scss',
@@ -124,11 +119,6 @@ var paths = {
     test:'test/siteart/',
     dist: 'public/siteart/'
   },
-  // bowerCSS: {
-  //   bourbon: 'bower_components/bourbon/app/assets/stylesheets/**/*',
-  //   bitters: 'bower_components/bitters/core/*.scss',
-  //   css: 'source/sass/vendor/'
-  // }
 };
 
 // tasks
@@ -149,15 +139,19 @@ gulp.task('templates', function() {
 // concatenates scripts, but not items in exclude folder. includes vendor folder
 gulp.task('concat', function() {
   gulp.src([paths.scripts.vendor, paths.scripts.input,'!' + paths.scripts.exclude])
+   .pipe(sourcemaps.init())
    .pipe(concat('main.js'))
-   .pipe(gulp.dest(paths.scripts.testing))
    .pipe(minifyJS())
+   .pipe(sourcemaps.write("."))
+   .pipe(gulp.dest(paths.scripts.testing))
    .pipe(gulp.dest(paths.scripts.dist));
 });
 gulp.task('exclude', function() {
   gulp.src(paths.scripts.exclude)
-   .pipe(gulp.dest(paths.scripts.testing))
+   .pipe(sourcemaps.init())
    .pipe(minifyJS())
+   .pipe(sourcemaps.write("."))
+   .pipe(gulp.dest(paths.scripts.testing))
    .pipe(gulp.dest(paths.scripts.dist));
 });
 // lints main javascript file for site
@@ -204,15 +198,12 @@ gulp.task('lint', function() {
   ))
   .pipe(eslint.format())
   .pipe(eslint.failAfterError());
-    // .pipe(jshint())
-    // .pipe(jshint.reporter(stylish))
-    // .pipe(jshint.reporter('fail'));
 });
 // lints and minifies css, moves to testing and dist
 gulp.task('css', function() {
   var plugins = [
     autoprefixer({browsers: ['last 2 versions']}),
-    // cssnano()
+    cssnano()
     gradient(),
     pixelstorem({
       base: 16,
@@ -228,6 +219,7 @@ gulp.task('css', function() {
   ];
   gulp.src([paths.styles.input, paths.styles.exclude])
    .pipe(scsslint())
+   .pipe(sourcemaps.init())
    .pipe(sass({
      includePaths: require('node-bourbon').includePaths
    }))
@@ -237,8 +229,9 @@ gulp.task('css', function() {
         openbrace: 'end-of-line',
         autosemicolon: true
     }))
-   .pipe(gulp.dest(paths.styles.testing))
     .pipe(cleanCSS())
+    .pipe(sourcemaps.write("."))
+    .pipe(gulp.dest(paths.styles.testing))
     .pipe(gulp.dest(paths.styles.dist));
 });
 // creates svg sprite from folder of SVGs and moves it to testing and dist
@@ -253,15 +246,6 @@ gulp.task('svg', function () {
         }))
         .pipe(gulp.dest(paths.svg.output));
 });
-// gulp.task('bitters', function () {
-//     return gulp.src(paths.bowerCSS.bitters)
-//         .pipe(gulp.dest(paths.bowerCSS.css));
-// });
-//
-// gulp.task('bourbon', function() {
-//   return gulp.src(paths.bowerCSS.bourbon)
-//     .pipe(gulp.dest(paths.bowerCSS.css));
-// });
 
 // converts fonts css into styles with Base 64 fonts embedded
 gulp.task('fonts', function () {
@@ -281,16 +265,6 @@ gulp.task('markdown', function () {
         .pipe(markdown())
         .pipe(gulp.dest(paths.markdown.output));
 });
-// moves bower dependencies to vendor folder
-// gulp.task('bower', function() {
-//    return gulp.src(mainBowerFiles({
-//     paths: {
-//         bowerDirectory: paths.bower.components,
-//         bowerJson: paths.bower.json
-//     }
-// }))
-//     .pipe(gulp.dest(paths.bower.vendor))
-// });
 // copies conents of the src siteart folder
 gulp.task('siteart', function() {
   return gulp.src(paths.siteart.input)
@@ -382,8 +356,6 @@ gulp.task('listen', function () {
 });
 
 gulp.task('prebuild', [
-	// 'bourbon',
-	// 'bitters',
   'svg',
   'markdown'
 ]);
@@ -393,7 +365,6 @@ gulp.task('default', [
 	'templates',
 	'css',
 	'svg',
-	// 'bower',
   'lint',
   'siteart',
   'concat',
