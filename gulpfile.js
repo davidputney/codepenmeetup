@@ -57,6 +57,11 @@ var htmltidy = require('gulp-htmltidy'),
 // web server
 var webserver = require('gulp-webserver');
 
+
+var myplugin = require('postcss-myplugin');
+
+var pixelstorem = require('postcss-pixelstorem');
+
 var paths = {
   pageTemplates : {
     input : 'source/templates/**/{*.html,*shtml}',
@@ -208,7 +213,18 @@ gulp.task('css', function() {
   var plugins = [
     autoprefixer({browsers: ['last 2 versions']}),
     // cssnano()
-    gradient()
+    gradient(),
+    pixelstorem({
+      base: 16,
+      unit: "rem",
+      exclude: ['border']
+    }),
+    myplugin({
+        fontstacks: {
+            'Extra Stack': '"Extra Stack", "Moar Fonts", Extra, serif',
+            'Arial': 'Arial, "Comic Sans"'
+        }
+    })
   ];
   gulp.src([paths.styles.input, paths.styles.exclude])
    .pipe(scsslint())
