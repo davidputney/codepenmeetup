@@ -41,11 +41,14 @@ var stylish = require('jshint-stylish'),
 var svgstore = require('gulp-svgstore'),
     svgmin = require('gulp-svgmin');
 
-// posts css
+// post css
 var postcss = require('gulp-postcss'),
     gradient = require('postcss-easing-gradients');
 //bower
 // var mainBowerFiles = require('main-bower-files');
+
+//babel
+var babel = require("gulp-babel");
 
 // markdown
 var markdown = require('gulp-markdown');
@@ -144,6 +147,7 @@ gulp.task('templates', function() {
 // concatenates scripts, but not items in exclude folder. includes vendor folder
 gulp.task('concat', function() {
   gulp.src([paths.scripts.vendor, paths.scripts.input,'!' + paths.scripts.exclude])
+   .pipe(babel())
    .pipe(concat('main.js'))
    .pipe(gulp.dest(paths.scripts.testing))
    .pipe(minifyJS())
@@ -158,6 +162,7 @@ gulp.task('exclude', function() {
 // lints main javascript file for site
 gulp.task('lint', function() {
   return gulp.src('source/scripts/functions.js')
+  .pipe(babel())
   .pipe(eslint(
     {
       "parser": "babel-eslint",
