@@ -40,6 +40,7 @@
     "jshint-stylish": "^2.0.1",
     "node-bourbon": "^4.2.8",
     "postcss-easing-gradients": "^1.2.3",
+    "postcss-pixels-to-rem": "^0.8.0",
     "uglify": "^0.1.5"
   },
   "dependencies": {
