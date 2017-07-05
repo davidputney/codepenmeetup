@@ -1,7 +1,7 @@
-#Basic site
+# Basic site
 Uses Gulp, Bourbon and HTML5 Boilerplate to create a start for a basic website or prototyping.
 
-##Precis
+## Precis
 * Sass and sass linting
 * Linting and minification.
 * SVG spriting
@@ -11,7 +11,7 @@ Uses Gulp, Bourbon and HTML5 Boilerplate to create a start for a basic website o
 * Markdown conversion for handling and adding content.
 * Server with live reload
 
-##Installation
+## Installation
 * Clone
 * `gem install scss_lint` to install scss linter
 * To use imageMagick tasks, install imageMagick via Homebrew.
