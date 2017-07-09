@@ -1,0 +1,31 @@
+Step 1:
+Gravity pulls the ball down accelerating it downward at a constant rate.
+It rebounds upward but it loses some energy when it lands, and it has to accelerate upward against gravity. So it starts fast and goes slower as it travels upward.
+
+- Move bottom point to 30 percent.
+
+Step 2:
+We need to make the ball accelerate downward and decelerate upward.
+
+- Add cubic bezier easing.
+
+Step 3:
+A ball will pause at the top of the arc.
+
+- Add stop point at 85 percent
+
+Step 4:
+Ball will pause at the bottom before it rebounds.
+
+- Add stop point at bottom
+
+Step 5:
+Ball will flatten at the bottom from the force of the impact.
+
+- Reduce height and increase width between impact and time ball starts arc back up.
+- Set back to normal width at 50%
+
+Step 6:
+When a ball rebounds, it flexes back in the opposite direction.
+
+- At 50%, set width narrow width and tall height.
