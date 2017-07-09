@@ -1,10 +1,10 @@
 $sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 $aqua:#2989a2;
+$timing:1.2s;
 
 .error-overlay {
   width:100vw;
   height:100vh;
-  position: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,11 +18,6 @@ $aqua:#2989a2;
   height:rem(270);
   position: relative;
 }
-.error-overlay--active {
-  opacity:1;
-  transition: opacity .4s;
-  pointer-events: auto;
-}
 .login-error-message {
   font-family:$sans;
   font-size:rem(15);
@@ -30,7 +25,6 @@ $aqua:#2989a2;
   height:rem(28);
   color:$aqua;
   margin:0 auto rem(40);
-  transition: opacity .2s;
   flex-grow:0;
   width:100%;
     @media screen and (max-width:rem(700))	{
@@ -38,28 +32,24 @@ $aqua:#2989a2;
       margin: 0 0 rem(10) 0;
      }
 }
-.loader {
-  transition: opacity .4s 1s;
-  z-index:1;
-}
 .loader-icon {
   width:rem(30);
   height:rem(30);
   background-color: $aqua;
   border-radius: 50%;
   transform: translateY(-170px);
-  animation-name: bounceball;
-  animation-duration: 1.2s;
-  animation-iteration-count: infinite;
-  animation-timing-function: cubic-bezier(.8,0.1,.28,.89);
-  animation-play-state: running;
-  // animation-fill-mode: forwards;
   position: absolute;
   bottom: 0px;
   left:0;
   right:0;
   margin:0 auto;
   z-index:1;
+}
+.loader-icon.bounce {
+  animation-name: bounceball;
+  animation-duration: $timing;
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(.8,0.1,.28,.89);
 }
 .loader-shadow {
   width: 15px;
@@ -72,11 +62,11 @@ $aqua:#2989a2;
   right:0;
   margin:0 auto;
   box-shadow:0 0 3px 3px rgba($light, .6);
+}
+.loader-shadow.bounce {
   animation-name:shadow;
   animation-iteration-count: infinite;
-  animation-duration: 1.2s;
-  // animation-direction: alternate;
-  timing-function: ease-out;
+  animation-duration: $timing;
 }
 @keyframes bounceball {
    0% {
@@ -87,7 +77,7 @@ $aqua:#2989a2;
      height: 30px;
      width:30px;
    }
-   32% {
+   33% {
      transform: translateY(0px);
       height: 15px;
       width:38px;
@@ -106,10 +96,9 @@ $aqua:#2989a2;
    }
 }
 @keyframes shadow {
-
-  0%{ opacity:0; transform: scale(.9);}
-  20%{ opacity:0; transform: scale(.9);}
+  0%{ opacity:0; transform: scale(1.2);}
+  20%{ opacity:0; transform: scale(1.2);}
   32%{ opacity:1; transform: scale(1.8);}
   50%{ opacity:1; transform: scale(1.8);}
-  100%{ opacity:0; transform: scale(.9);}
+  100%{ opacity:0; transform: scale(1.2);}
 }
