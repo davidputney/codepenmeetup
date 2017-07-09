@@ -1,0 +1,22 @@
+
+.loader-icon.bounce-sucks {
+  animation-name: bounceballSucks;
+  animation-duration: $timing;
+  animation-iteration-count: infinite;
+}
+.loader-shadow.bounce {
+  animation-name:shadow;
+  animation-iteration-count: infinite;
+  animation-duration: $timing;
+}
+@keyframes bounceballSucks {
+   0% {
+     transform: translateY(-170px);
+   }
+   50% {
+     transform: translateY(0px);
+   }
+   100%  {
+     transform: translateY(-170px);
+   }
+}
